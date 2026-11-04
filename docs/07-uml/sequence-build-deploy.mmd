@@ -1,0 +1,22 @@
+sequenceDiagram
+  autonumber
+  participant Dev as Penulis
+  participant G as Git
+  participant CI as Build/CI
+  participant V as lib/content/validate
+  participant DB as SQLite
+  participant Out as Artefak statis
+
+  Dev->>G: commit content/**.md
+  G->>CI: trigger build
+  CI->>V: validateContent()
+  V-->>CI: ok / errors[]
+  alt ada error
+    CI-->>Dev: build gagal + daftar error (file:field)
+  else valid
+    CI->>CI: render Markdown, bangun search-index.json
+    CI->>DB: prisma migrate deploy + seed soal/solusi
+    DB-->>CI: seed ok
+    CI->>Out: tulis halaman statis
+    Out-->>Dev: siap deploy
+  end

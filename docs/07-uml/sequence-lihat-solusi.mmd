@@ -1,0 +1,16 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant A as Route /api/latihan/[id]/solusi
+  participant D as Prisma + SQLite
+  participant L as Log server
+
+  P->>B: klik "Lihat solusi"
+  B->>A: GET /api/latihan/ai-llm-03-latihan-1/solusi
+  A->>A: rate limit
+  A->>D: SELECT kode, catatan WHERE latihanId = ? AND bahasa = ?
+  D-->>A: kode solusi
+  A->>L: catat permintaan solusi (id, bahasa, waktu)
+  A-->>B: {kode, catatan}
+  B-->>P: tampilkan solusi + penjelasan

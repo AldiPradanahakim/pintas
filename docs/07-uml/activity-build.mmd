@@ -1,0 +1,23 @@
+flowchart TD
+  A([npm run build]) --> B[Scan content/**/*.md]
+  B --> C{Ada file .md?}
+  C -- tidak --> C1[Gagal: konten kosong] --> Z([Build berhenti])
+  C -- ya --> D[Parse frontmatter tiap file]
+  D --> E{Schema valid?}
+  E -- tidak --> E1[Gagal: sebut file + field] --> Z
+  E -- ya --> F{Slug unik dalam track?}
+  F -- tidak --> F1[Gagal: slug duplikat] --> Z
+  F -- ya --> G{Ada heading '## Lapis 2'?}
+  G -- tidak --> G1[Gagal: lapis 2 wajib] --> Z
+  G -- ya --> H{Kuis 3-5 & latihan >= 1?}
+  H -- tidak --> H1[Gagal: kuis/latihan tidak lengkap] --> Z
+  H -- ya --> I{Tautan internal valid?}
+  I -- tidak --> I1[Gagal: tautan mati] --> Z
+  I -- ya --> J[Render Markdown + sanitasi]
+  J --> K[Bangun indeks pencarian]
+  K --> L[Seed soal & solusi ke DB]
+  L --> M[Seed cek: soal yatim, opsi tidak cocok]
+  M --> N{Seed valid?}
+  N -- tidak --> N1[Gagal: data tidak konsisten] --> Z
+  N -- ya --> O[Tulis halaman statis + search-index.json]
+  O --> P([Build sukses])

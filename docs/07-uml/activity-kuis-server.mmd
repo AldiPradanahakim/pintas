@@ -1,0 +1,15 @@
+flowchart TD
+  A([POST /api/kuis/:slug/jawab]) --> B{Input valid? pola soal_id, jawaban <= 500 char}
+  B -- tidak --> B1[400 VALIDASI_GAGAL] --> Z([Selesai])
+  B -- ya --> C{Rate limit < 20/menit/IP?}
+  C -- tidak --> C1[429 RATE_LIMIT] --> Z
+  C -- ya --> D[Ambil soal dari DB]
+  D --> E{Soal ada?}
+  E -- tidak --> E1[404 SOAL_TIDAK_DITEMUKAN] --> Z
+  E -- ya --> F{Tipe soal?}
+  F -- pilihan_ganda --> G[Bandingkan huruf opsi]
+  F -- isian_singkat --> H[Normalisasi: trim, lowercase, rapatkan spasi, buang tanda baca ujung]
+  G --> I[Hasil benar/salah]
+  H --> I
+  I --> J[Respons: benar, jawaban_benar, penjelasan]
+  J --> Z

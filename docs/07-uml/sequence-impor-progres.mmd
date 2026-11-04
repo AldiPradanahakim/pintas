@@ -1,0 +1,20 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant S as lib/progress/schema
+  participant LS as localStorage
+
+  P->>B: pilih berkas JSON
+  B->>S: parse + validasi skema
+  alt tidak valid
+    S-->>B: {ok: false, alasan}
+    B-->>P: tolak, data lama utuh
+  else valid
+    S-->>B: {ok: true, data}
+    B-->>P: konfirmasi "data sekarang akan diganti"
+    P->>B: setuju
+    B->>LS: tulis semua kunci pintas:v1:*
+    LS-->>B: ok
+    B-->>P: progres diperbarui
+  end

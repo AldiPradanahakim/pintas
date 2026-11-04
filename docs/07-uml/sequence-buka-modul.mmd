@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant N as Next.js (statis)
+  participant LS as localStorage
+
+  P->>B: GET /modul/ai-llm/03-embedding
+  B->>N: minta halaman
+  N-->>B: HTML hasil build + CSS + JS
+  B->>LS: baca pintas:v1:modul
+  LS-->>B: status modul (belum/sedang/selesai)
+  B-->>P: render lapis 1 + badge status
+  P->>B: klik "Lapis 2"
+  B-->>P: buka <details> (tanpa permintaan jaringan)

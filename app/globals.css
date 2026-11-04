@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+/*
+ * Tema lewat variabel CSS, bukan varian `dark:` di setiap kelas. Satu sumber warna;
+ * kelas `.dark` di <html> diset skrip inline di <head> sebelum body dirender, jadi
+ * tidak ada kedip (FR-35) dan pilihan pengguna menang atas preferensi sistem.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+}
+
+/* ---------- Isi modul (HTML hasil render Markdown) ---------- */
+
+.modul {
+  @apply text-[15px] leading-relaxed text-slate-800 dark:text-slate-200;
+}
+.modul h2 {
+  @apply mt-10 mb-3 scroll-mt-24 border-b border-slate-200 pb-1.5 text-xl font-semibold text-slate-900 dark:border-slate-800 dark:text-white;
+}
+.modul h3 {
+  @apply mt-7 mb-2 scroll-mt-24 text-base font-semibold text-slate-900 dark:text-white;
+}
+.modul p {
+  @apply my-3;
+}
+.modul ul {
+  @apply my-3 list-disc space-y-1 pl-6;
+}
+.modul ol {
+  @apply my-3 list-decimal space-y-1 pl-6;
+}
+.modul li > ul,
+.modul li > ol {
+  @apply my-1;
+}
+.modul a {
+  @apply font-medium text-teal-700 underline decoration-teal-400/60 underline-offset-2 dark:text-teal-400;
+}
+.modul strong {
+  @apply font-semibold text-slate-900 dark:text-white;
+}
+.modul blockquote {
+  @apply my-4 border-l-4 border-slate-200 pl-4 text-slate-600 italic dark:border-slate-700 dark:text-slate-400;
+}
+.modul hr {
+  @apply my-8 border-slate-200 dark:border-slate-800;
+}
+.modul :not(pre) > code {
+  @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.85em] dark:bg-slate-800;
+}
+.modul table {
+  @apply my-4 block w-full overflow-x-auto border-collapse text-sm;
+}
+.modul th {
+  @apply border border-slate-200 bg-slate-50 px-3 py-2 text-left font-semibold dark:border-slate-700 dark:bg-slate-800;
+}
+.modul td {
+  @apply border border-slate-200 px-3 py-2 align-top dark:border-slate-700;
+}
+.modul input[type='checkbox'] {
+  @apply mr-2 align-middle;
+}
+
+/* Blok kode: <figure><figcaption>label + salin</figcaption><pre>…</pre></figure> */
+.modul figure.blok-kode {
+  @apply my-4 overflow-hidden rounded-lg border border-slate-800 bg-[#0d1117];
+}
+.modul figure.blok-kode > figcaption {
+  @apply flex items-center justify-between gap-2 border-b border-slate-800 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-slate-400;
+}
+.modul figure.blok-kode > figcaption button {
+  @apply rounded border border-slate-700 px-2 py-0.5 font-sans text-xs normal-case tracking-normal text-slate-300 transition hover:bg-slate-800;
+}
+.modul figure.blok-kode > pre {
+  @apply overflow-x-auto px-3.5 py-3 text-[13px] leading-relaxed;
+}
+.modul figure.blok-kode > pre code {
+  @apply font-mono;
+}
+/* Blok output: tanpa label bahasa, jadi dibedakan warnanya. */
+.modul figure.blok-output > figcaption {
+  @apply text-teal-300;
+}
+
+/* Shiki dua tema (defaultColor:false): warna terang jadi default, gelap saat .dark. */
+html.dark .modul .shiki,
+html.dark .modul .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}

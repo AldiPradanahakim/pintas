@@ -1,0 +1,61 @@
+// Skema DB Pintas — 4 tabel (docs/06-erd.md § 5).
+// Konten materi TIDAK di sini: materi adalah file Markdown di content/.
+// Yang disimpan hanya yang harus dirahasiakan atau dicatat: soal, kunci, solusi, log.
+// Pindah ke PostgreSQL: ganti provider + DATABASE_URL, tanpa ubah kode aplikasi.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Soal {
+  id         Int    @id @default(autoincrement())
+  modulSlug  String
+  nomor      Int
+  tipe       String
+  pertanyaan String
+  jawaban    String
+  penjelasan String
+  tingkat    String @default("dasar")
+  opsi       Opsi[]
+
+  @@unique([modulSlug, nomor])
+  @@index([modulSlug])
+}
+
+model Opsi {
+  id     Int    @id @default(autoincrement())
+  soalId Int
+  kunci  String
+  teks   String
+  urutan Int    @default(0)
+  soal   Soal   @relation(fields: [soalId], references: [id], onDelete: Cascade)
+
+  @@unique([soalId, kunci])
+}
+
+model Solusi {
+  id        Int     @id @default(autoincrement())
+  latihanId String
+  bahasa    String
+  kode      String
+  catatan   String?
+
+  @@unique([latihanId, bahasa])
+}
+
+model LogLatihan {
+  id          Int      @id @default(autoincrement())
+  latihanId   String
+  bahasa      String
+  ukuranBytes Int
+  durasiMs    Int
+  status      String
+  dibuatPada  DateTime @default(now())
+
+  @@index([dibuatPada])
+}

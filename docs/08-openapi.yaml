@@ -1,0 +1,369 @@
+openapi: 3.1.0
+info:
+  title: Pintas API
+  version: 1.0.0
+  description: |
+    API internal Pintas. Tanpa autentikasi: pengamanan lewat validasi input,
+    allowlist bahasa, dan rate limit per IP. Endpoint hanya untuk hal yang
+    tidak boleh diketahui klien (kunci jawaban, solusi) atau butuh proses
+    (eksekusi kode).
+  contact:
+    name: Pintas
+    url: https://github.com/pintas-dev
+
+servers:
+  - url: http://localhost:3000
+    description: Pengembangan lokal
+  - url: https://pintas.dev
+    description: Produksi (belum aktif)
+
+tags:
+  - name: kuis
+    description: Soal dan penilaian kuis
+  - name: latihan
+    description: Eksekusi kode dan solusi latihan
+  - name: sistem
+    description: Status layanan
+
+paths:
+  /api/kuis/{slug}:
+    get:
+      tags: [kuis]
+      summary: Ambil soal satu modul tanpa kunci jawaban
+      operationId: getSoal
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9-]+$'
+            maxLength: 100
+          example: 03-embedding
+      responses:
+        '200':
+          description: Daftar soal
+          headers:
+            Cache-Control:
+              schema: { type: string }
+              description: 'public, max-age=300'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoalResponse'
+        '400':
+          $ref: '#/components/responses/ValidasiGagal'
+        '404':
+          $ref: '#/components/responses/TidakDitemukan'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+
+  /api/kuis/{slug}/jawab:
+    post:
+      tags: [kuis]
+      summary: Nilai satu jawaban
+      operationId: jawabSoal
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9-]+$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [soal_id, jawaban]
+              additionalProperties: false
+              properties:
+                soal_id:
+                  type: integer
+                  minimum: 1
+                  example: 12
+                jawaban:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  example: a
+      responses:
+        '200':
+          description: Hasil penilaian
+          headers:
+            Cache-Control:
+              schema: { type: string }
+              description: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JawabResponse'
+        '400':
+          $ref: '#/components/responses/ValidasiGagal'
+        '404':
+          $ref: '#/components/responses/TidakDitemukan'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+
+  /api/latihan/jalankan:
+    post:
+      tags: [latihan]
+      summary: Jalankan kode latihan
+      operationId: jalankanLatihan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [latihan_id, bahasa, kode]
+              additionalProperties: false
+              properties:
+                latihan_id:
+                  type: string
+                  pattern: '^[a-z0-9-/]+$'
+                  maxLength: 100
+                  example: ai-llm-03-latihan-1
+                bahasa:
+                  type: string
+                  enum: [python, javascript, typescript, csharp, go, php, java, sql]
+                kode:
+                  type: string
+                  minLength: 1
+                  maxLength: 65536
+      responses:
+        '200':
+          description: Hasil eksekusi
+          headers:
+            Cache-Control:
+              schema: { type: string }
+              description: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JalankanResponse'
+        '400':
+          $ref: '#/components/responses/ValidasiGagal'
+        '413':
+          description: Kode melebihi 64 KB
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+        '502':
+          description: Penyedia eksekusi gagal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: Eksekusi melebihi 15 detik
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/latihan/{id}/solusi:
+    get:
+      tags: [latihan]
+      summary: Ambil kode solusi latihan
+      operationId: getSolusi
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9-/]+$'
+          example: ai-llm-03-latihan-1
+        - name: bahasa
+          in: query
+          required: false
+          schema:
+            type: string
+          example: python
+      responses:
+        '200':
+          description: Kode solusi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolusiResponse'
+        '404':
+          $ref: '#/components/responses/TidakDitemukan'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+
+  /api/health:
+    get:
+      tags: [sistem]
+      summary: Status layanan
+      operationId: getHealth
+      responses:
+        '200':
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  data:
+                    type: object
+                    properties:
+                      status: { type: string, example: sehat }
+                      db: { type: string, example: ok }
+                      runner: { type: string, example: wandbox }
+                      waktu: { type: string, format: date-time }
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          const: false
+        error:
+          type: object
+          required: [kode, pesan]
+          properties:
+            kode:
+              type: string
+              enum:
+                - VALIDASI_GAGAL
+                - BAHASA_TIDAK_DIDUKUNG
+                - SLUG_TIDAK_VALID
+                - SOAL_TIDAK_DITEMUKAN
+                - LATIHAN_TIDAK_DITEMUKAN
+                - SOLUSI_TIDAK_ADA
+                - KODE_TERLALU_BESAR
+                - RATE_LIMIT
+                - RUNNER_GAGAL
+                - RUNNER_TIMEOUT
+                - DB_GAGAL
+            pesan:
+              type: string
+            detail:
+              nullable: true
+              oneOf:
+                - type: object
+                - type: 'null'
+
+    Opsi:
+      type: object
+      required: [kunci, teks]
+      properties:
+        kunci: { type: string, enum: [a, b, c, d] }
+        teks: { type: string, maxLength: 300 }
+
+    Soal:
+      type: object
+      required: [id, nomor, tipe, pertanyaan]
+      properties:
+        id: { type: integer }
+        nomor: { type: integer, minimum: 1, maximum: 5 }
+        tipe: { type: string, enum: [pilihan_ganda, isian_singkat] }
+        pertanyaan: { type: string, maxLength: 1000 }
+        opsi:
+          type: array
+          items: { $ref: '#/components/schemas/Opsi' }
+          description: Hanya ada untuk tipe pilihan_ganda
+
+    SoalResponse:
+      type: object
+      required: [ok, data]
+      properties:
+        ok: { type: boolean, const: true }
+        data:
+          type: object
+          required: [modul_slug, jumlah, soal]
+          properties:
+            modul_slug: { type: string }
+            jumlah: { type: integer, minimum: 0 }
+            soal:
+              type: array
+              items: { $ref: '#/components/schemas/Soal' }
+
+    JawabResponse:
+      type: object
+      required: [ok, data]
+      properties:
+        ok: { type: boolean, const: true }
+        data:
+          type: object
+          required: [benar, jawaban_benar, penjelasan]
+          properties:
+            benar: { type: boolean }
+            jawaban_benar: { type: string }
+            penjelasan: { type: string }
+
+    JalankanResponse:
+      type: object
+      required: [ok, data]
+      properties:
+        ok: { type: boolean, const: true }
+        data:
+          type: object
+          required: [status, stdout, stderr, exit_code, durasi_ms, output_harapan]
+          properties:
+            status: { type: string, enum: [lulus, gagal, error] }
+            stdout: { type: string }
+            stderr: { type: string }
+            exit_code: { type: integer }
+            durasi_ms: { type: integer }
+            output_harapan: { type: string }
+            pesan:
+              nullable: true
+              oneOf:
+                - type: string
+                - type: 'null'
+
+    SolusiResponse:
+      type: object
+      required: [ok, data]
+      properties:
+        ok: { type: boolean, const: true }
+        data:
+          type: object
+          required: [latihan_id, bahasa, kode]
+          properties:
+            latihan_id: { type: string }
+            bahasa: { type: string }
+            kode: { type: string }
+            catatan:
+              nullable: true
+              oneOf:
+                - type: string
+                - type: 'null'
+
+  responses:
+    ValidasiGagal:
+      description: Input tidak sesuai skema
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TidakDitemukan:
+      description: Sumber daya tidak ditemukan
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimit:
+      description: Melebihi batas permintaan
+      headers:
+        Retry-After:
+          schema: { type: integer }
+        X-RateLimit-Limit:
+          schema: { type: integer }
+        X-RateLimit-Remaining:
+          schema: { type: integer }
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

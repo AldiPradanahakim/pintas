@@ -1,0 +1,22 @@
+flowchart TD
+  A([POST /api/latihan/jalankan]) --> B{Body valid? bahasa, latihan_id, kode}
+  B -- tidak --> B1[400 VALIDASI_GAGAL] --> Z([Selesai])
+  B -- ya --> C{Bahasa di allowlist?}
+  C -- tidak --> C1[400 BAHASA_TIDAK_DIDUKUNG] --> Z
+  C -- ya --> D{Ukuran kode <= 64 KB?}
+  D -- tidak --> D1[413 KODE_TERLALU_BESAR] --> Z
+  D -- ya --> E{Rate limit <= 20/menit/IP?}
+  E -- tidak --> E1[429 RATE_LIMIT] --> Z
+  E -- ya --> F[Ambil output_harapan dari konten server]
+  F --> G[Panggil penyedia eksekusi, timeout 15 s]
+  G --> H{Berhasil?}
+  H -- timeout --> H1[504 RUNNER_TIMEOUT, catat log] --> Z
+  H -- error penyedia --> H2[502 RUNNER_GAGAL, catat log] --> Z
+  H -- ya --> I[Normalkan stdout/stderr]
+  I --> J{stdout == output_harapan?}
+  J -- ya --> K[status lulus]
+  J -- tidak --> L[status gagal]
+  K --> M[Catat LogLatihan: bahasa, ukuran, durasi, status]
+  L --> M
+  M --> N[Respons: status, stdout, stderr, exit_code, durasi_ms]
+  N --> Z

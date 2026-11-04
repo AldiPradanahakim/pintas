@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant A as Route /api/kuis/[slug]
+  participant D as Prisma + SQLite
+
+  P->>B: gulir ke bagian kuis
+  B->>A: GET /api/kuis/03-embedding
+  A->>A: validasi slug (pola ^[a-z0-9-]+$)
+  A->>D: SELECT Soal + Opsi WHERE modulSlug = ?
+  D-->>A: baris soal (termasuk kolom jawaban)
+  A->>A: buang kolom jawaban & penjelasan dari payload
+  A-->>B: [{id, tipe, pertanyaan, opsi[]}]
+  B-->>P: render soal tanpa kunci

@@ -1,0 +1,19 @@
+flowchart TD
+  subgraph Ekspor
+    A([H7: tombol Ekspor]) --> B[Baca semua kunci pintas:v1:*]
+    B --> C[Serialisasi JSON + versi skema]
+    C --> D[Unduh pintas-progres-YYYYMMDD.json]
+  end
+  subgraph Impor
+    E([H7: tombol Impor]) --> F[Pilih berkas]
+    F --> G{JSON valid?}
+    G -- tidak --> G1[Tolak: berkas tidak valid, data lama utuh] --> Z([Selesai])
+    G -- ya --> H{Versi skema didukung?}
+    H -- tidak --> H1[Tolak: versi tidak didukung] --> Z
+    H -- ya --> I{Skema cocok?}
+    I -- tidak --> I1[Tolak: skema tidak cocok] --> Z
+    I -- ya --> J[Konfirmasi: data sekarang akan diganti]
+    J --> K{Pengguna setuju?}
+    K -- tidak --> Z
+    K -- ya --> L[Tulis ke localStorage] --> Z
+  end

@@ -1,0 +1,20 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant A as Route /jawab
+  participant G as lib/quiz/grade
+  participant D as Prisma + SQLite
+  participant LS as localStorage
+
+  P->>B: pilih opsi / ketik jawaban, tekan "Periksa"
+  B->>A: POST {soal_id, jawaban}
+  A->>A: validasi Zod (soal_id int, jawaban <= 500 char)
+  A->>A: rate limit 20/menit/IP
+  A->>D: SELECT Soal WHERE id = ?
+  D-->>A: {tipe, jawaban, penjelasan}
+  A->>G: grade(tipe, jawaban_user, jawaban_benar)
+  G-->>A: benar: boolean
+  A-->>B: {benar, jawaban_benar, penjelasan}
+  B->>LS: simpan hasil soal + skor sementara
+  B-->>P: benar/salah + penjelasan

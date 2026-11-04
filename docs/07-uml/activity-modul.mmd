@@ -1,0 +1,34 @@
+flowchart TD
+  A([Mulai]) --> B[Buka beranda / cari modul]
+  B --> C{Modul ditemukan?}
+  C -- tidak --> C1[Tampilkan saran + pencarian ulang] --> B
+  C -- ya --> D[Baca lapis 1]
+  D --> E{Butuh detail?}
+  E -- ya --> E1[Buka lapis 2: parameter, error, alasan] --> F
+  E -- tidak --> F{Ada latihan?}
+  F -- ya --> G{Jenis latihan?}
+  G -- web --> G1[Edit kode di editor]
+  G1 --> G2[Tekan Jalankan]
+  G2 --> G3{Validasi server lolos?}
+  G3 -- tidak --> G4[Tampilkan 429/413/400] --> G1
+  G3 -- ya --> G5[Kirim ke Wandbox]
+  G5 --> G6{Wandbox merespons < 15 s?}
+  G6 -- tidak --> G7[Status error: timeout] --> G1
+  G6 -- ya --> G8{stdout == output harapan?}
+  G8 -- tidak --> G9[Tampilkan stdout/stderr + verdict gagal] --> G1
+  G8 -- ya --> G10[Verdict lulus, simpan di localStorage] --> H
+  G -- laptop --> G11[Ikuti 6 langkah panduan]
+  G11 --> G12{Hasil sesuai?}
+  G12 -- tidak --> G13[Buka bagian 'Kalau gagal', perbaiki] --> G11
+  G12 -- ya --> G14[Tandai latihan selesai] --> H
+  F -- tidak --> H
+  H[Kerjakan kuis 3-5 soal] --> I[Jawab per soal]
+  I --> J[Server menilai]
+  J --> K{Semua soal terjawab?}
+  K -- tidak --> I
+  K -- ya --> L[Tampilkan skor + tautan soal salah]
+  L --> M{Semua dijawab & >=1 latihan lulus?}
+  M -- ya --> N[Status modul: selesai]
+  M -- tidak --> O[Status modul: sedang]
+  N --> P([Selesai])
+  O --> P

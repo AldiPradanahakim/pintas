@@ -1,0 +1,24 @@
+sequenceDiagram
+  autonumber
+  actor P as Pembelajar
+  participant B as Browser
+  participant A as Route /api/latihan/jalankan
+  participant GW as lib/runner/gateway
+  participant PV as provider.wandbox
+  participant W as Wandbox API
+  participant D as Prisma + SQLite
+
+  P->>B: tekan "Jalankan"
+  B->>A: POST {latihan_id, bahasa, kode}
+  A->>A: validasi Zod + allowlist + ukuran <= 64 KB
+  A->>A: rate limit 20/menit/IP
+  A->>GW: run({bahasa, kode, output_harapan})
+  GW->>PV: execute(...)
+  PV->>W: POST /api/compile.json (timeout 15 s)
+  W-->>PV: {status, program_output, program_error, compiler_error}
+  PV-->>GW: hasil mentah
+  GW->>GW: normalisasi stdout/stderr, bandingkan output_harapan
+  GW->>D: INSERT LogLatihan (tanpa isi kode)
+  GW-->>A: {status, stdout, stderr, exit_code, durasi_ms}
+  A-->>B: hasil
+  B-->>P: verdict + output

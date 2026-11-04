@@ -1,0 +1,38 @@
+graph LR
+  PB([Pembelajar])
+  PN([Penulis Konten])
+  WB([Wandbox])
+  CI([Build / CI])
+
+  subgraph Pintas
+    UC01(UC-01 Lihat track)
+    UC02(UC-02 Cari modul)
+    UC03(UC-03 Baca modul)
+    UC04(UC-04 Buka lapis 2)
+    UC05(UC-05 Salin kode)
+    UC06(UC-06 Kerjakan kuis)
+    UC07(UC-07 Latihan di web)
+    UC08(UC-08 Latihan di laptop)
+    UC09(UC-09 Lihat solusi)
+    UC10(UC-10 Tandai selesai)
+    UC11(UC-11 Lihat progres)
+    UC12(UC-12 Ekspor/impor progres)
+    UC13(UC-13 Rubrik capstone)
+    UC14(UC-14 Tanya jawab interview)
+    UC15(UC-15 Panduan platform)
+    UC16(UC-16 Daftar stack)
+    UC17(UC-17 Ubah tema)
+    UC18(UC-18 Tulis modul)
+    UC19(UC-19 Validasi konten)
+    UC20(UC-20 Bangun indeks)
+  end
+
+  PB --> UC01 & UC02 & UC03 & UC06 & UC07 & UC08 & UC10 & UC11 & UC12 & UC13 & UC14 & UC15 & UC16 & UC17
+  UC03 -.include.-> UC04
+  UC03 -.include.-> UC05
+  UC03 -.include.-> UC10
+  UC07 -.include.-> UC09
+  UC07 --- WB
+  PN --> UC18
+  UC18 -.include.-> UC19
+  CI --> UC19 & UC20

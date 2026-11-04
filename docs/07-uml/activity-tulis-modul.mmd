@@ -1,0 +1,15 @@
+flowchart TD
+  A([Buka /keystatic - dev only]) --> B[Buat entri modul]
+  B --> C[Isi frontmatter: track, nomor, slug, estimasi, prasyarat, latihan]
+  C --> D[Tulis lapis 1]
+  D --> E[Tulis '## Lapis 2' + detail: parameter, error, alasan]
+  E --> F[Tulis kuis 3-5 + penjelasan tiap jawaban]
+  F --> G[Jalankan npm run validate:content]
+  G --> H{Lolos?}
+  H -- tidak --> I[Perbaiki sesuai pesan] --> G
+  H -- ya --> J[Jalankan setiap latihan web di halaman modul]
+  J --> K{Semua lulus?}
+  K -- tidak --> L[Perbaiki kode/output harapan] --> J
+  K -- ya --> M[Periksa tampilan di mobile + desktop]
+  M --> N[Commit + push]
+  N --> O([Modul siap])

@@ -1,0 +1,57 @@
+erDiagram
+    MODUL ||--o{ SOAL : "punya (logis, lewat slug)"
+    SOAL ||--o{ OPSI : "punya"
+    LATIHAN ||--o{ SOLUSI : "punya (logis, lewat id)"
+    LATIHAN ||--o{ LOG_LATIHAN : "dicatat"
+
+    MODUL {
+        string slug PK "dari nama file, unik"
+        string track
+        int nomor
+        string judul
+        int estimasi_menit
+    }
+
+    SOAL {
+        int id PK
+        string modul_slug FK
+        int nomor
+        string tipe "pilihan_ganda | isian_singkat"
+        string pertanyaan
+        string jawaban "kunci"
+        string penjelasan
+        string tingkat
+    }
+
+    OPSI {
+        int id PK
+        int soal_id FK
+        string kunci "a | b | c | d"
+        string teks
+        int urutan
+    }
+
+    LATIHAN {
+        string id PK
+        string modul_slug
+        string bahasa
+        string output_harapan
+    }
+
+    SOLUSI {
+        int id PK
+        string latihan_id FK
+        string bahasa
+        string kode
+        string catatan
+    }
+
+    LOG_LATIHAN {
+        int id PK
+        string latihan_id FK
+        string bahasa
+        int ukuran_bytes
+        int durasi_ms
+        string status
+        datetime dibuat_pada
+    }

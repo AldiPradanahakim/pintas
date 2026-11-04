@@ -1,0 +1,16 @@
+flowchart TD
+  A([Ctrl+K]) --> B[Panel terbuka, fokus input]
+  B --> C{Kueri >= 2 karakter?}
+  C -- tidak --> C1[Tampilkan riwayat 5 terakhir] --> C
+  C -- ya --> D[Tunggu 200 ms sejak ketikan terakhir]
+  D --> E[Filter track?]
+  E -- ada --> E1[Saring hasil per track] --> F
+  E -- tidak --> F[Cocokkan judul + heading + teks + kode]
+  F --> G{Ada hasil?}
+  G -- tidak --> G1[Pesan 'Tidak ada hasil' + 3 saran] --> H
+  G -- ya --> G2[Tampilkan maks 8 hasil, sorot kata kunci]
+  G2 --> H{Aksi pengguna}
+  H -- Enter pada hasil --> I[Buka modul] --> Z([Selesai])
+  H -- Enter tanpa hasil --> J[Buka /cari?q=] --> Z
+  H -- Esc --> K[Tutup panel] --> Z
+  H -- mengetik lagi --> D
