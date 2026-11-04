@@ -59,7 +59,7 @@ latihan:
       cara reset password akun yang lupa
     cek_berhasil:
       - "Tabel dibuat tanpa error dan jumlah baris 3"
-      - "Kueri password mengembalikan satu baris"
+      - "Kueri password mengembalikan tepat satu baris"
       - "Kueri akun mengembalikan dua baris (urutannya bisa berbeda antar versi SQLite)"
     kalau_gagal:
       - error: "sqlite3.OperationalError: no such module: fts5"
