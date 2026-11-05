@@ -76,6 +76,11 @@ latihan:
         arti: "Pembagian dengan nol, atau urutan operasi salah (kurung hilang)."
         perbaikan:
           - "Pastikan pembagi 1500, bukan (1500+300+200)"
+      - error: "'python' is not recognized as an internal or external command"
+        arti: "Python tidak ada di PATH Windows."
+        perbaikan:
+          - "Pasang Python dari python.org, centang 'Add python.exe to PATH'"
+          - "Atau pakai perintah python3 di Linux/macOS"
     buktikan:
       perubahan: "Ubah konteks dari 1.500 menjadi 6.000 token (dokumen lebih besar), lalu ulangi langkah 4."
       hasil_diharapkan: "Titik impas turun jadi 500 — konteks yang lebih besar membuat RAG lebih mahal per permintaan, sehingga fine-tuning menang lebih cepat."
