@@ -41,8 +41,8 @@ latihan:
     langkah:
       - perintah: "mkdir eval-lokal && cd eval-lokal"
         penjelasan: "Folder kerja terpisah supaya berkas latihan tidak tercampur."
-      - perintah: "python -c \"import json; k=[{'tanya':'Apa itu embedding?','wajib':['vektor']},{'tanya':'Berapa dimensi yang umum?','wajib':['768','1536']},{'tanya':'Apa itu chunking?','wajib':['potong']}]; json.dump(k, open('kasus.json','w'), ensure_ascii=False)\""
-        penjelasan: "Menyimpan 3 kasus uji. Tiap kasus punya daftar kata yang WAJIB muncul di jawaban yang benar."
+      - perintah: "python -c \"import json; k=[{'tanya':'Apa itu embedding?','wajib':['vektor']},{'tanya':'Berapa dimensi yang umum?','wajib':['1536']},{'tanya':'Apa itu chunking?','wajib':['memotong']}]; json.dump(k, open('kasus.json','w'), ensure_ascii=False)\""
+        penjelasan: "Menyimpan 3 kasus uji. Tiap kasus punya daftar kata yang WAJIB muncul di jawaban yang benar. Dua jebakan halus di sini: (1) kalau kasus kedua ditulis ['768','1536'], all() menuntut KEDUANYA muncul, jadi jawaban yang benar tapi hanya menyebut satu angka dianggap gagal; (2) kata wajib harus benar-benar ada di jawaban — 'memotong' TIDAK memuat 'potong' karena awalan me- meluluhkan huruf p."
       - perintah: "python -c \"import json; k=json.load(open('kasus.json')); print(len(k))\""
         penjelasan: "Memastikan berkas terbaca dan jumlah kasus sesuai. Output 3."
       - perintah: "python -c \"import json; k=json.load(open('kasus.json')); jawab={'Apa itu embedding?':'Embedding mengubah teks menjadi vektor angka.','Berapa dimensi yang umum?':'Umumnya 1536.','Apa itu chunking?':'Chunking adalah memecah dokumen.'}; lulus=sum(all(w in jawab[c['tanya']] for w in c['wajib']) for c in k); print(f'{lulus}/{len(k)}')\""
