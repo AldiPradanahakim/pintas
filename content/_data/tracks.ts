@@ -73,6 +73,24 @@ export const TRACKS: Track[] = [
     untukSiapa: 'Untuk pengembang yang butuh layanan kecil dengan konsumsi memori rendah.',
     tersedia: true,
   },
+  {
+    slug: 'kafka',
+    nama: 'Kafka',
+    tier: 3,
+    kegunaan: 'Topik, partisi, offset, consumer group, jaminan pengiriman.',
+    untukSiapa:
+      'Untuk pengembang yang harus menyambungkan beberapa layanan lewat aliran kejadian, bukan panggilan langsung — dan perlu tahu apa yang terjadi saat salah satu layanan mati.',
+    tersedia: true,
+  },
+  {
+    slug: 'angular',
+    nama: 'Angular',
+    tier: 3,
+    kegunaan: 'Komponen, signals, service, routing, form, HTTP.',
+    untukSiapa:
+      'Untuk pengembang yang masuk ke aplikasi frontend berskala besar dengan struktur baku dan tipe yang ketat.',
+    tersedia: true,
+  },
 ];
 
 export const trackDari = (slug: string): Track | null => TRACKS.find((t) => t.slug === slug) ?? null;

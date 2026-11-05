@@ -70,12 +70,12 @@ latihan:
         penjelasan: "Membuat folder kerja dan berkas go.mod. go run main.go sebenarnya jalan tanpa go.mod karena berkasnya disebut langsung, tapi modul dibutuhkan begitu kamu menambah paket lain atau menjalankan go build . — dan membuatnya sekarang menghindari kejutan itu nanti."
       - perintah: "notepad main.go"
         penjelasan: "Buat berkas main.go dan tempel program dari blok 'Program lengkap' di atas. Di Linux/macOS ganti dengan nano main.go."
-      - perintah: "go vet main.go"
-        penjelasan: "Pemeriksa bawaan Go. Perintah ini SENYAP kalau tidak ada temuan — tidak mencetak apa pun berarti lulus."
-      - perintah: "go run main.go"
-        penjelasan: "Jalankan di terminal pertama; biarkan menyala. Di terminal kedua: curl -s -i http://localhost:8099/halo/aldi lalu curl -s -i -H \"X-Kunci: rahasia\" http://localhost:8099/halo/aldi. Yang pertama 401, yang kedua 200 berisi 'halo, aldi'."
-      - perintah: "Ubah urutan pemasangan: taruh h = denganLog(h) SEBELUM h = denganKunci(...), lalu ulangi go run main.go dan kedua curl tadi"
-        penjelasan: "Sekarang kunci ada di lapis terluar. Request tanpa kunci ditolak sebelum sempat menyentuh log — di terminal server hanya terlihat satu baris log, bukan dua."
+      - perintah: "go vet main.go && go run main.go"
+        penjelasan: "go vet adalah pemeriksa bawaan Go: SENYAP kalau tidak ada temuan (tidak mencetak apa pun berarti lulus). Setelah itu server menyala — biarkan terminal ini berjalan."
+      - perintah: "curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:8099/halo/aldi && curl -s -o /dev/null -w \"%{http_code}\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/halo/aldi && curl -s -o /dev/null -w \"%{http_code}\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/sehat"
+        penjelasan: "Di terminal kedua. Tiga kode status dalam tiga baris: 401, 200, 204. Lihat terminal pertama — muncul tiga baris log, termasuk untuk request yang ditolak, karena log dipasang paling luar."
+      - perintah: "Tukar urutan pemasangan — taruh h = denganLog(h) SEBELUM h = denganKunci(\"rahasia\", h) — lalu jalankan ulang dan hitung baris log-nya"
+        penjelasan: "Sekarang kunci ada di lapis terluar. Request tanpa kunci ditolak sebelum menyentuh log, jadi hanya dua baris log yang muncul (bukan tiga): satu untuk /halo/aldi yang lolos, satu untuk /sehat."
     hasil: |-
       HTTP/1.1 401 Unauthorized
       Content-Type: text/plain; charset=utf-8
@@ -84,14 +84,23 @@ latihan:
       kunci salah
 
       HTTP/1.1 200 OK
+      Date: Thu, 05 Nov 2026 08:17:04 GMT
       Content-Length: 10
       Content-Type: text/plain; charset=utf-8
 
       halo, aldi
+
+      HTTP/1.1 204 No Content
+      Date: Thu, 05 Nov 2026 08:17:05 GMT
+
+      401
+      200
+      204
     cek_berhasil:
       - "Request tanpa header X-Kunci dijawab 401 dengan badan 'kunci salah' (12 byte)"
       - "Request dengan X-Kunci: rahasia dijawab 200 dengan badan 'halo, aldi' (10 byte)"
-      - "Terminal server mencetak dua baris log untuk dua request itu, dan go vet tidak mencetak apa pun"
+      - "/sehat dengan kunci dijawab 204 tanpa badan"
+      - "Terminal server mencetak tiga baris log untuk tiga request, dan go vet tidak mencetak apa pun"
     kalau_gagal:
       - error: "listen tcp :8099: bind: Only one usage of each socket address is normally permitted."
         arti: "Port 8099 sudah dipakai proses lain — biasanya sisa go run sebelumnya yang belum dimatikan."
@@ -100,10 +109,11 @@ latihan:
           - "Atau ganti angka port di dua tempat: log.Println dan http.ListenAndServe, misalnya :8770"
           - "Cari pemakainya: netstat -ano | findstr :8099, lalu taskkill /PID <pid> /F"
       - error: "go: go.mod file not found in current directory or any parent directory"
-        arti: "Perintah go dijalankan di folder tanpa go.mod."
+        arti: "Perintah go dijalankan di folder tanpa go.mod — biasanya karena kamu menjalankan go build . atau go run . (titik), bukan go run main.go."
         perbaikan:
           - "cd latihan-http dulu"
-          - "go mod init latihanhttp, lalu ulangi go run"
+          - "go mod init latihanhttp, lalu ulangi perintahnya"
+          - "Atau jalankan go run main.go — berkas yang disebut langsung tidak butuh go.mod"
       - error: "404 page not found untuk /halo/aldi, padahal rutenya ada"
         arti: "Pola rute 'GET /halo/{nama}' hanya dikenal Go 1.22 ke atas. Di versi lebih lama, seluruh string itu dianggap path literal."
         perbaikan:
@@ -116,8 +126,8 @@ latihan:
           - "Cocokkan angka port di perintah curl dengan angka di program"
           - "Di Windows, curl bawaan tersedia sejak Windows 10 1803; kalau tidak ada, pakai browser"
     buktikan:
-      perubahan: "Setelah langkah 6, kembalikan urutan seperti semula (kunci di dalam, log di luar), jalankan lagi, dan perhatikan jumlah baris log saat request tanpa kunci ditolak."
-      hasil_diharapkan: "Dua baris log lagi, bukan satu. Dengan log di lapis terluar, request yang ditolak 401 pun tercatat — itulah gunanya menaruh logging paling luar: kamu melihat percobaan yang gagal, bukan hanya yang berhasil."
+      perubahan: "Setelah langkah 6, kembalikan urutan seperti semula (kunci di dalam, log di luar), jalankan lagi, dan hitung ulang baris log."
+      hasil_diharapkan: "Tiga baris log lagi, bukan dua. Dengan log di lapis terluar, request yang ditolak 401 pun tercatat — itulah gunanya menaruh logging paling luar: kamu melihat percobaan yang gagal, bukan hanya yang berhasil."
 kuis:
   - tipe: pilihan_ganda
     pertanyaan: "Kenapa middleware ditulis sebagai func(http.Handler) http.Handler, bukan sebagai daftar perintah yang dipanggil berurutan di dalam satu handler besar?"
@@ -168,7 +178,20 @@ kuis:
 
 ## Lapis 1
 
-### Server Go dalam sebelas baris
+### Satu fungsi, dua argumen
+
+Seluruh `net/http` berdiri di atas satu tanda tangan fungsi:
+
+```go
+func(w http.ResponseWriter, r *http.Request)
+```
+
+- `w` — **bukan** badan respons. Ia tujuan tulisan: `fmt.Fprintf(w, ...)` mengirim byte ke client, `w.Header().Set(...)` menyiapkan header, `w.WriteHeader(404)` mengirim status. Status dan header hanya bisa dikirim **sekali**; setelah byte pertama keluar, keduanya terkunci.
+- `r` — permintaan yang sudah diurai: `r.Method`, `r.URL.Path`, `r.Header`, `r.Body`, dan `r.Context()`.
+
+`r` juga membawa pembatalan. Kalau client menutup koneksi, `r.Context().Done()` ditutup — itulah cara handler yang memanggil database tahu harus berhenti.
+
+### Server Go dalam lima baris
 
 ```go
 mux := http.NewServeMux()
@@ -181,21 +204,10 @@ http.ListenAndServe(":8080", mux)
 Tiga hal yang terjadi, berurutan:
 
 - `NewServeMux()` membuat **router**: tabel pola rute ke handler.
-- `HandleFunc` mendaftarkan pola. Sejak Go 1.22 pola boleh memuat metode (`GET`) dan variabel path (`{nama}`).
+- `HandleFunc` mendaftarkan pola. Sejak Go 1.22 pola boleh memuat metode (`GET`) dan variabel path (`{nama}`, dibaca lewat `r.PathValue("nama")`).
 - `ListenAndServe` membuka port, lalu untuk **setiap** koneksi menjalankan handler di goroutine baru.
 
 Baris terakhir itu menjelaskan banyak hal sekaligus: kenapa `net/http` sudah konkuren tanpa konfigurasi, dan kenapa state bersama di level paket adalah bug yang menunggu waktu — dua request bisa menyentuhnya bersamaan.
-
-### Dua parameter yang isinya bukan sekadar data
-
-```go
-func(w http.ResponseWriter, r *http.Request)
-```
-
-- `w` — **bukan** badan respons. Ia tujuan tulisan: `fmt.Fprint(w, ...)` mengirim byte ke client, `w.Header().Set(...)` menyiapkan header, `w.WriteHeader(404)` mengirim status. Status dan header hanya bisa dikirim **sekali**; setelah byte pertama keluar, keduanya terkunci.
-- `r` — permintaan yang sudah diurai: `r.Method`, `r.URL.Path`, `r.Header`, `r.Body`, dan `r.Context()`.
-
-`r` juga membawa pembatalan. Kalau client menutup koneksi, `r.Context().Done()` ditutup — itulah cara handler yang memanggil database tahu harus berhenti.
 
 ### Middleware: handler yang membungkus handler
 
