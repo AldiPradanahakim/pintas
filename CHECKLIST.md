@@ -182,9 +182,10 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 ## D. Urutan pengerjaan (README)
 
 - [ ] **1.** Rancangan (dokumen ini)
-- [ ] **2.** Platform jalan dengan 3 modul contoh → review gaya bahasa
-- [ ] **3.** Track AI & LLM Engineer lengkap (12–16 modul + capstone) — `content/ai-llm/` 6 modul
+- [x] **2.** Platform jalan dengan 3 modul contoh → review gaya bahasa
+- [x] **3.** Track AI & LLM Engineer lengkap (12–16 modul + capstone) — `content/ai-llm/` 12 modul + capstone di `content/_data/capstone.ts`
 - [ ] **4.** Track Odoo Developer — `content/odoo/` 0 modul
+      catatan: `fondasi` sudah aktif dengan 3 modul (git, http, sql) di luar urutan README
 - [ ] **5.** Track .NET/C# — `content/dotnet/` 0 modul
 - [ ] **6.** Track Docker — `content/docker/` 0 modul
 - [ ] **7.** Go, Kafka, Angular — `content/go/` 0 modul
