@@ -39,7 +39,7 @@ export const TRACKS: Track[] = [
     tier: 0,
     kegunaan: 'Git, HTTP, SQL, CLI, Docker, testing — dipakai semua track.',
     untukSiapa: 'Untuk siapa pun yang ingin dasar-dasarnya tidak lagi jadi penghalang saat membaca dokumentasi.',
-    tersedia: false,
+    tersedia: true,
   },
   {
     slug: 'odoo',
