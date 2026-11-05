@@ -47,7 +47,7 @@ export const TRACKS: Track[] = [
     tier: 2,
     kegunaan: 'ERP Python: model, view XML/QWeb, OWL, manifest & inheritance.',
     untukSiapa: 'Untuk pengembang yang akan menyesuaikan ERP untuk perusahaan, bukan membangun ERP dari nol.',
-    tersedia: false,
+    tersedia: true,
   },
   {
     slug: 'dotnet',
