@@ -55,7 +55,7 @@ export const TRACKS: Track[] = [
     tier: 2,
     kegunaan: 'ASP.NET Core, EF Core, Blazor, Minimal API.',
     untukSiapa: 'Untuk pengembang yang masuk ke lingkungan enterprise berbasis Microsoft.',
-    tersedia: false,
+    tersedia: true,
   },
   {
     slug: 'docker',
