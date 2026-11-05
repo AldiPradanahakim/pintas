@@ -14,7 +14,7 @@ const Soal = z
   .object({
     tipe: z.enum(TIPE_SOAL),
     pertanyaan: z.string().min(5).max(1000),
-    opsi: z.record(Kunci, z.string().max(300)).optional(),
+    opsi: z.record(z.string(), z.string().max(300)).optional(),
     jawaban: z.string().min(1).max(500),
     penjelasan: z.string().min(1, 'penjelasan wajib ada — soal tanpa penjelasan ditolak'),
     tingkat: z.enum(TINGKAT).default('dasar'),

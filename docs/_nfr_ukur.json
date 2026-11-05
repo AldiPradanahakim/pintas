@@ -1,0 +1,30 @@
+{
+  "_catatan": "Hasil pengukuran NFR yang butuh peramban. Diisi oleh uji CDP (browser_exec), bukan dikarang. Tanggal: 2026-11-05. Server: next start port 3106, build produksi.",
+  "NFR-01": {
+    "nilai_ms": 132,
+    "sampel": [400, 128, 132],
+    "median_ms": 132,
+    "batas_ms": 500,
+    "status": "LULUS",
+    "cara": "PerformanceObserver first-contentful-paint, 3 kali muat, ambil median"
+  },
+  "NFR-16": {
+    "status": "BELUM DIUJI",
+    "catatan": "Baru diuji di Chromium (Chrome/Edge). Firefox & Safari belum dijalankan di mesin ini."
+  },
+  "NFR-17": {
+    "status": "LULUS",
+    "hasil": [
+      {"lebar": 360, "scrollWidth": 360, "clientWidth": 360, "overflow": false},
+      {"lebar": 768, "scrollWidth": 753, "clientWidth": 753, "overflow": false},
+      {"lebar": 1280, "scrollWidth": 1265, "clientWidth": 1265, "overflow": false}
+    ],
+    "cara": "Emulation.setDeviceMetricsOverride + bandingkan documentElement.scrollWidth vs clientWidth"
+  },
+  "NFR-18": {
+    "status": "LULUS",
+    "panjang_teks_tanpa_js": 4619,
+    "h1_tanpa_js": "Embedding: mengubah teks jadi angka yang bisa dibandingkan",
+    "cara": "Emulation.setScriptExecutionDisabled=true lalu muat /modul/ai-llm/embedding"
+  }
+}

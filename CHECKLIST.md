@@ -146,37 +146,37 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
       `/modul/ai-llm/token-dan-konteks` → skor performance 100, FCP 0,4 s (3 run: 100/0,4 s).
       (Preset mobile bawaan — simulasi 4G + CPU 4× — memberi 75; angka itu simulasi jaringan,
       bukan "lokal" seperti bunyi kriteria.)
-- [ ] **NFR-02** Ukuran JS yang dimuat di halaman modul < 150 KB (gzip), di luar halaman latihan.
+- [x] **NFR-02** Ukuran JS yang dimuat di halaman modul < 150 KB (gzip), di luar halaman latihan.
       uji: Laporan bundle.
-- [ ] **NFR-03** Pencarian mengembalikan hasil < 50 ms untuk indeks 500 modul.
+- [x] **NFR-03** Pencarian mengembalikan hasil < 50 ms untuk indeks 500 modul.
       uji: Benchmark skrip di CI.
-- [ ] **NFR-04** Panggilan ke Wandbox punya timeout 15 detik; lewat itu → status `error` dengan pesan jelas.
+- [x] **NFR-04** Panggilan ke Wandbox punya timeout 15 detik; lewat itu → status `error` dengan pesan jelas.
       uji: Simulasi lambat → pesan timeout, bukan menggantung.
-- [ ] **NFR-05** Tidak ada rahasia di bundle klien. Variabel sensitif hanya dibaca di server.
+- [x] **NFR-05** Tidak ada rahasia di bundle klien. Variabel sensitif hanya dibaca di server.
       uji: `grep` bundle untuk nama variabel rahasia → kosong.
-- [ ] **NFR-06** Kunci jawaban kuis dan solusi latihan tidak dapat diambil massal; endpoint jawab memakai rate limit 20 permintaan/menit/IP.
+- [x] **NFR-06** Kunci jawaban kuis dan solusi latihan tidak dapat diambil massal; endpoint jawab memakai rate limit 20 permintaan/menit/IP.
       uji: Skrip 100 permintaan → 429.
-- [ ] **NFR-07** Semua input pengguna divalidasi di server: `modul_slug` harus cocok pola `^[a-z0-9-]+$`, jawaban maksimal 500 karakter, kode maksimal 64 KB.
+- [x] **NFR-07** Semua input pengguna divalidasi di server: `modul_slug` harus cocok pola `^[a-z0-9-]+$`, jawaban maksimal 500 karakter, kode maksimal 64 KB.
       uji: Input berisi `<script>` tidak dirender sebagai HTML.
-- [ ] **NFR-08** Konten Markdown di-*sanitize*: HTML mentah di file konten tidak dieksekusi; hanya tag aman yang diizinkan.
+- [x] **NFR-08** Konten Markdown di-*sanitize*: HTML mentah di file konten tidak dieksekusi; hanya tag aman yang diizinkan.
       uji: Menulis `<script>alert(1)</script>` di file konten → tidak muncul di halaman.
-- [ ] **NFR-09** Header keamanan diset: `Content-Security-Policy` (tanpa `unsafe-eval`, kecuali halaman latihan), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`.
+- [x] **NFR-09** Header keamanan diset: `Content-Security-Policy` (tanpa `unsafe-eval`, kecuali halaman latihan), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`.
       uji: Cek header respons 9 halaman.
-- [ ] **NFR-10** Tidak ada cookie sesi, tidak ada data pribadi, tidak ada pelacak pihak ketiga.
+- [x] **NFR-10** Tidak ada cookie sesi, tidak ada data pribadi, tidak ada pelacak pihak ketiga.
       uji: Daftar cookie kosong selain preferensi tema.
-- [ ] **NFR-11** Dependensi: `npm audit` tanpa kerentanan high/critical saat rilis.
+- [x] **NFR-11** Dependensi: `npm audit` tanpa kerentanan high/critical saat rilis.
       uji: CI gagal bila ada.
-- [ ] **NFR-12** Build gagal bila ada tautan internal mati, slug duplikat, atau frontmatter tidak valid.
+- [x] **NFR-12** Build gagal bila ada tautan internal mati, slug duplikat, atau frontmatter tidak valid.
       uji: Uji dengan file rusak → build merah.
-- [ ] **NFR-13** Build gagal bila ada modul tanpa lapis 2, tanpa kuis, atau tanpa latihan.
+- [x] **NFR-13** Build gagal bila ada modul tanpa lapis 2, tanpa kuis, atau tanpa latihan.
       uji: Uji tiga kasus.
-- [ ] **NFR-14** Migrasi DB reversibel dan dijalankan otomatis saat start di lokal.
+- [x] **NFR-14** Migrasi DB reversibel dan dijalankan otomatis saat start di lokal.
       uji: `prisma migrate reset` lalu `npm run dev` → DB siap, halaman jalan.
-- [ ] **NFR-15** Semua halaman punya penanganan error: kegagalan server menampilkan halaman error dengan tautan beranda, bukan stack trace.
+- [x] **NFR-15** Semua halaman punya penanganan error: kegagalan server menampilkan halaman error dengan tautan beranda, bukan stack trace.
       uji: Matikan DB → halaman menampilkan pesan ramah.
 - [ ] **NFR-16** Berjalan di Chrome/Edge/Firefox/Safari versi 2 tahun terakhir.
       uji: | NFR-17 | Tata letak responsif: 360 px (ponsel), 768 px (tablet), 1280 px+ (desktop).
-- [ ] **NFR-19** MVP berjalan lokal dengan dua perintah: `npm install` lalu `npm run dev`. Tidak ada layanan berbayar.
+- [x] **NFR-19** MVP berjalan lokal dengan dua perintah: `npm install` lalu `npm run dev`. Tidak ada layanan berbayar.
       uji: | NFR-20 | Waktu build < 2 menit untuk 20 modul.
 
 ## D. Urutan pengerjaan (README)

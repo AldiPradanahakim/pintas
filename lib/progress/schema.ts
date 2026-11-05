@@ -14,13 +14,17 @@ const Waktu = z.string().min(1);
 export const SkemaProgres = z.object({
   versi: z.literal(1),
   /** Modul yang ditandai selesai manual oleh pengguna. */
-  modul: z.record(z.object({ manual: z.literal(true), waktu: Waktu })).default({}),
+  modul: z.record(z.string(), z.object({ manual: z.literal(true), waktu: Waktu })).default({}),
   /** Skor kuis terakhir per modul; `total` = jumlah soal saat itu. */
-  kuis: z.record(z.object({ skor: z.number().int().min(0), total: z.number().int().min(1), waktu: Waktu })).default({}),
+  kuis: z
+    .record(z.string(), z.object({ skor: z.number().int().min(0), total: z.number().int().min(1), waktu: Waktu }))
+    .default({}),
   /** Status latihan terakhir per `latihan_id`. */
-  latihan: z.record(z.object({ status: z.enum(['lulus', 'gagal', 'error']), waktu: Waktu })).default({}),
+  latihan: z
+    .record(z.string(), z.object({ status: z.enum(['lulus', 'gagal', 'error']), waktu: Waktu }))
+    .default({}),
   /** Kunci bank interview yang sudah dikuasai: `<track>:<id>`. */
-  interview: z.record(z.boolean()).default({}),
+  interview: z.record(z.string(), z.boolean()).default({}),
 });
 
 export type Progres = z.infer<typeof SkemaProgres>;
