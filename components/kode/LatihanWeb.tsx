@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import type { LatihanWeb as TipeWeb } from '@/lib/content/types';
+import { catatLatihan } from '@/lib/progress/store';
 
 /**
  * Editor dimuat terpisah (bukan diimpor langsung): CodeMirror ~250 KB, dan halaman modul
@@ -85,7 +86,12 @@ export default function LatihanWeb({ latihan, nomor }: { latihan: LatihanPublik;
         return;
       }
       setHasil(json.data as HasilUji);
+      // Status latihan masuk ke progres bersama (satu kunci `pintas:v1:progres`):
+      // halaman /progres menghitung "modul selesai" dari sini, bukan dari kunci per latihan.
+      catatLatihan(latihan.id, (json.data as HasilUji).status);
       try {
+        // Salinan hasil lengkap tetap disimpan per latihan: yang ini untuk menampilkan
+        // output terakhir saat halaman dibuka ulang, bukan untuk menghitung progres.
         localStorage.setItem(KUNCI_HASIL + latihan.id, JSON.stringify(json.data));
       } catch {
         /* mode privat */
@@ -169,8 +175,8 @@ export default function LatihanWeb({ latihan, nomor }: { latihan: LatihanPublik;
       {galat && <p className="mt-2 rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{galat}</p>}
 
       {hasil && (
-        <div className={`mt-3 rounded border px-3 py-2 text-sm ${warna}`}>
-          <p className="font-semibold">
+        <div role="status" data-status-latihan={hasil.status} className={`mt-3 rounded border px-3 py-2 text-sm ${warna}`}>
+          <p className="font-semibold" data-label-status>
             {hasil.status === 'lulus' ? 'Lulus' : hasil.status === 'gagal' ? 'Belum tepat' : 'Error'} ·{' '}
             <span className="font-normal text-slate-600 dark:text-slate-400">{hasil.durasi_ms} ms</span>
           </p>

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import DaftarIsi from '@/components/modul/DaftarIsi';
+import TandaiSelesai from '@/components/progres/TandaiSelesai';
 import PenyalinKode from '@/components/kode/PenyalinKode';
 import LatihanWeb from '@/components/kode/LatihanWeb';
 import LatihanLaptop from '@/components/kode/LatihanLaptop';
@@ -132,6 +133,14 @@ export default async function HalamanModul({
             </section>
           )}
         </div>
+
+        {/* Penanda selesai ditaruh setelah kuis: di sinilah pengguna tahu apa yang masih
+            kurang, dan di sini pula statusnya berubah otomatis. */}
+        <TandaiSelesai
+          slug={slug}
+          jumlahSoal={fm.kuis.length}
+          idLatihan={fm.latihan.map((l) => l.id)}
+        />
 
         <nav className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
           {sebelumnya ? (

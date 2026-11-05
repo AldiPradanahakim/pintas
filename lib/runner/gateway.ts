@@ -12,6 +12,23 @@ export interface HasilLatihan {
 }
 
 /**
+ * Kegagalan penyedia / timeout bukan "kode salah" — pengguna tidak boleh disalahkan, dan
+ * pesannya harus menyebut itu, bukan berpura-pura ada yang salah pada kodenya.
+ */
+function gagalRunner(e: unknown): HasilLatihan {
+  const pesan = e instanceof RunnerError ? e.message : 'Penyedia eksekusi gagal.';
+  return {
+    status: 'error',
+    stdout: '',
+    stderr: pesan,
+    exit_code: -1,
+    durasi_ms: 0,
+    output_harapan: '',
+    pesan,
+  };
+}
+
+/**
  * Jalankan kode lalu bandingkan stdout dengan output harapan.
  *
  * `output_harapan` datang dari server (dibaca dari frontmatter modul), bukan dari klien:
@@ -33,19 +50,20 @@ export async function jalankanLatihan({
   try {
     hasil = await jalankanDiPenyedia(bahasa, kode, { timeoutMs });
   } catch (e) {
-    if (e instanceof RunnerError) {
-      // Timeout & kegagalan penyedia bukan "kode salah" — pengguna tidak boleh disalahkan.
-      return {
-        status: 'error',
-        stdout: '',
-        stderr: e.message,
-        exit_code: -1,
-        durasi_ms: 0,
-        output_harapan: outputHarapan,
-        pesan: e.message,
-      };
+    if (e instanceof RunnerError && e.jenis === 'gagal') {
+      // Penyedia tanpa SLA (batasan L1): kegagalan pertama sering transien. Satu percobaan
+      // ulang mencegah pengguna melihat "Error" padahal kodenya benar. Timeout TIDAK diulang
+      // — kode yang lambat akan lambat lagi, dan pengguna menunggu dua kali lipat.
+      try {
+        hasil = await jalankanDiPenyedia(bahasa, kode, { timeoutMs });
+      } catch (e2) {
+        return gagalRunner(e2);
+      }
+    } else if (e instanceof RunnerError) {
+      return gagalRunner(e);
+    } else {
+      throw e;
     }
-    throw e;
   }
 
   const harapan = normalisasiOutput(outputHarapan);

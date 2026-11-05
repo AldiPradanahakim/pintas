@@ -14,7 +14,10 @@
     "validate:content": "tsx scripts/validate-content.ts",
     "test": "tsx scripts/cek-logika.ts",
     "test:e2e": "playwright test",
-    "cek": "tsx scripts/validate-content.ts && tsx scripts/cek-logika.ts"
+    "cek": "tsx scripts/validate-content.ts && tsx scripts/cek-logika.ts",
+    "verify:rute": "node scripts/verify-rute.mjs",
+    "verify:progres": "node scripts/verify-progres.mjs",
+    "verify:latihan": "tsx scripts/verify-latihan.ts"
   },
   "dependencies": {
     "@codemirror/lang-go": "^6.0.1",

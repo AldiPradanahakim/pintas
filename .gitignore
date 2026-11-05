@@ -13,3 +13,4 @@ coverage/
 # Hasil uji Playwright (dibuat ulang tiap run)
 test-results/
 playwright-report/
+verifikasi/

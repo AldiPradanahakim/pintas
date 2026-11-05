@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { catatKuis } from '@/lib/progress/store';
 
 export interface SoalPublik {
   id: number;
@@ -15,8 +16,6 @@ interface HasilJawab {
   jawaban_benar: string;
   penjelasan: string;
 }
-
-const KUNCI_SKOR = 'pintas:v1:kuis:';
 
 /**
  * Kuis (F-07). Kunci jawaban TIDAK ada di props: server hanya mengirim pertanyaan dan
@@ -60,11 +59,9 @@ export default function Kuis({ slug, soal }: { slug: string; soal: SoalPublik[] 
       if (Object.keys(baru).length === soal.length) {
         const jumlahBenar = Object.values(baru).filter((h) => h.benar).length;
         setSkor(jumlahBenar);
-        try {
-          localStorage.setItem(KUNCI_SKOR + slug, String(jumlahBenar));
-        } catch {
-          /* mode privat */
-        }
+        // Satu sumber kebenaran: progres di `pintas:v1:progres`, bukan kunci terpisah
+        // per modul. Halaman /progres membaca kunci itu, jadi skor di sini WAJIB masuk ke sana.
+        catatKuis(slug, jumlahBenar, soal.length);
       }
     } catch {
       setGalat('Tidak bisa menghubungi server. Periksa koneksi.');
