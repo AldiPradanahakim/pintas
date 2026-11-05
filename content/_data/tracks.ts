@@ -71,7 +71,7 @@ export const TRACKS: Track[] = [
     tier: 3,
     kegunaan: 'Gin/Fiber, goroutine, binary tunggal.',
     untukSiapa: 'Untuk pengembang yang butuh layanan kecil dengan konsumsi memori rendah.',
-    tersedia: false,
+    tersedia: true,
   },
 ];
 
