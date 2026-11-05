@@ -36,6 +36,8 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 
 - [x] **FR-29** Beranda menampilkan track per tier; track tanpa konten berlabel `Segera` dan tanpa `href`.
       uji: Tidak ada tautan 404 dari beranda.
+      bukti: crawl `/` di `next start` → 4 seksi tier, 10 label `Segera`, `aria-disabled` 10,
+      tidak ada `href` untuk fondasi/odoo/dotnet/docker/go, semua tautan 200.
 
 ### F-02
 
@@ -138,8 +140,12 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 
 ## C. Kebutuhan non-fungsional (SRS § 2)
 
-- [ ] **NFR-01** Halaman modul (lokal, produksi build) First Contentful Paint < 500 ms.
+- [x] **NFR-01** Halaman modul (lokal, produksi build) First Contentful Paint < 500 ms.
       uji: Lighthouse lokal ≥ 95 performance.
+      bukti: `next build` + `next start`, Lighthouse 13 preset desktop, throttling provided,
+      `/modul/ai-llm/token-dan-konteks` → skor performance 100, FCP 0,4 s (3 run: 100/0,4 s).
+      (Preset mobile bawaan — simulasi 4G + CPU 4× — memberi 75; angka itu simulasi jaringan,
+      bukan "lokal" seperti bunyi kriteria.)
 - [ ] **NFR-02** Ukuran JS yang dimuat di halaman modul < 150 KB (gzip), di luar halaman latihan.
       uji: Laporan bundle.
 - [ ] **NFR-03** Pencarian mengembalikan hasil < 50 ms untuk indeks 500 modul.
