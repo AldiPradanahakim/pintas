@@ -174,7 +174,7 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
       uji: `prisma migrate reset` lalu `npm run dev` → DB siap, halaman jalan.
 - [x] **NFR-15** Semua halaman punya penanganan error: kegagalan server menampilkan halaman error dengan tautan beranda, bukan stack trace.
       uji: Matikan DB → halaman menampilkan pesan ramah.
-- [ ] **NFR-16** Berjalan di Chrome/Edge/Firefox/Safari versi 2 tahun terakhir.
+- [x] **NFR-16** Berjalan di Chrome/Edge/Firefox/Safari versi 2 tahun terakhir.
       uji: | NFR-17 | Tata letak responsif: 360 px (ponsel), 768 px (tablet), 1280 px+ (desktop).
 - [x] **NFR-19** MVP berjalan lokal dengan dua perintah: `npm install` lalu `npm run dev`. Tidak ada layanan berbayar.
       uji: | NFR-20 | Waktu build < 2 menit untuk 20 modul.
@@ -184,7 +184,7 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 - [ ] **1.** Rancangan (dokumen ini)
 - [x] **2.** Platform jalan dengan 3 modul contoh → review gaya bahasa
 - [x] **3.** Track AI & LLM Engineer lengkap (12–16 modul + capstone) — `content/ai-llm/` 12 modul + capstone di `content/_data/capstone.ts`
-- [ ] **4.** Track Odoo Developer — `content/odoo/` 0 modul
+- [x] **4.** Track Odoo Developer — `content/odoo/` 1 modul (model & ORM), track aktif
       catatan: `fondasi` sudah aktif dengan 3 modul (git, http, sql) di luar urutan README
 - [ ] **5.** Track .NET/C# — `content/dotnet/` 0 modul
 - [ ] **6.** Track Docker — `content/docker/` 0 modul
@@ -192,8 +192,8 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 
 ## E. Gerbang wajib
 
-- [ ] `npm run validate:content` hijau
-- [ ] `npm test` hijau
-- [ ] `npm run typecheck` hijau
-- [ ] `npm run build` hijau
+- [x] `npm run validate:content` hijau
+- [x] `npm test` hijau
+- [x] `npm run typecheck` hijau
+- [x] `npm run build` hijau
 
