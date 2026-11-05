@@ -95,12 +95,17 @@ Detail lengkap: `docs/05-arsitektur.md` § 4.
 ## Urutan pengerjaan
 
 1. ✅ Rancangan (dokumen ini)
-2. ⬜ Platform jalan dengan 3 modul contoh → review gaya bahasa
-3. ⬜ Track AI & LLM Engineer lengkap (12–16 modul + capstone)
-4. ⬜ Track Odoo Developer
-5. ⬜ Track .NET/C#
-6. ⬜ Track Docker
-7. ⬜ Go, Kafka, Angular
+2. ✅ Platform jalan dengan 3 modul contoh → review gaya bahasa
+3. ✅ Track AI & LLM Engineer lengkap (12 modul + capstone)
+4. ✅ Track Odoo Developer (3 modul)
+5. ✅ Track .NET/C# (3 modul)
+6. ✅ Track Docker (3 modul)
+7. ✅ Go (3 modul) · Kafka (1 modul) · Angular (1 modul)
+
+Tambahan di luar rencana awal: track **Fondasi** (4 modul: git, http, sql, cli) —
+dipakai sebagai prasyarat lintas track.
+
+**Total: 30 modul, 8 track.**
 
 ## Yang sengaja tidak ada di versi pertama
 
