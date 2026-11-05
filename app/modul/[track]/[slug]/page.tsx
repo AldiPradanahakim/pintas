@@ -86,7 +86,15 @@ export default async function HalamanModul({
         </header>
 
         {/* Isi markdown: sudah disanitasi saat build, jadi aman dirender sebagai HTML. */}
-        <div className="modul" dangerouslySetInnerHTML={{ __html: htmlLapis1 }} />
+        <section aria-labelledby="lapis-1">
+          <h2
+            id="lapis-1"
+            className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
+          >
+            Lapis 1 — ringkas
+          </h2>
+          <div className="modul" dangerouslySetInnerHTML={{ __html: htmlLapis1 }} />
+        </section>
 
         <details id="lapis-2" className="mt-8 scroll-mt-24 rounded-lg border border-slate-200 dark:border-slate-800">
           <summary className="cursor-pointer px-4 py-3 font-semibold">

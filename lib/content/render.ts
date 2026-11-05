@@ -146,6 +146,20 @@ export async function renderMarkdown(md: string): Promise<string> {
   return String(await prosesor.process(md));
 }
 
+/**
+ * Badan modul lama diawali `# Judul` sendiri, padahal halaman sudah merender judul
+ * sebagai `<h1>` di header. Dua `<h1>` di satu halaman membingungkan pembaca layar.
+ *
+ * HANYA baris pertama yang dibuang, dan hanya kalau ia heading level 1. Tidak memakai
+ * regex `^#` global: di dalam blok kode Python, `# komentar` juga berawalan `#` dan
+ * tidak boleh disentuh.
+ */
+export async function renderMarkdownBadan(md: string): Promise<string> {
+  const tanpaCR = md.replace(/\r\n?/g, '\n');
+  const dipangkas = tanpaCR.replace(/^\s*#[ \t]+\S[^\n]*(?:\n+|$)/, '');
+  return renderMarkdown(dipangkas);
+}
+
 export interface Heading {
   level: 2 | 3;
   teks: string;
@@ -162,7 +176,10 @@ export function daftarHeading(md: string): Heading[] {
   const terpakai = new Map<string, number>();
   let dalamBlok = false;
 
-  for (const baris of md.split('\n')) {
+  // Baris dinormalisasi lebih dulu: berkas di Windows memakai CRLF, dan `.` pada
+  // regex tidak cocok dengan `\r`, sehingga `(.+)$` gagal pada setiap baris dan
+  // daftar isi keluar kosong. Tanpa ini TOC hilang tanpa pesan galat apa pun.
+  for (const baris of md.replace(/\r\n?/g, '\n').split('\n')) {
     if (baris.trimStart().startsWith('```')) dalamBlok = !dalamBlok;
     if (dalamBlok) continue;
     const m = /^(#{2,3})\s+(.+)$/.exec(baris);

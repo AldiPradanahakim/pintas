@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { loadSemuaModul, pisahLapis } from './load';
-import { daftarHeading, renderMarkdown, teksPolos, type Heading } from './render';
+import { daftarHeading, renderMarkdown, renderMarkdownBadan, teksPolos, type Heading } from './render';
 import type { Modul, ModulRingkas } from './types';
 import type { EntriIndeks } from '../search/tipe';
 
@@ -66,7 +66,10 @@ export const renderModul = cache(async (track: string, slug: string): Promise<Mo
   if (!modul) return null;
 
   const { lapis1, lapis2 } = pisahLapis(modul.isi);
-  const [htmlLapis1, htmlLapis2] = await Promise.all([renderMarkdown(lapis1), renderMarkdown(lapis2)]);
+  const [htmlLapis1, htmlLapis2] = await Promise.all([
+    renderMarkdownBadan(lapis1),
+    renderMarkdown(lapis2),
+  ]);
 
   const satuTrack = await modulDariTrack(track);
   const i = satuTrack.findIndex((m) => m.frontmatter.slug === slug);
