@@ -63,7 +63,7 @@ export const TRACKS: Track[] = [
     tier: 3,
     kegunaan: 'Mengemas aplikasi agar jalan sama di laptop, CI, dan server.',
     untukSiapa: 'Untuk pengembang yang aplikasinya harus berjalan identik di banyak mesin.',
-    tersedia: false,
+    tersedia: true,
   },
   {
     slug: 'go',
