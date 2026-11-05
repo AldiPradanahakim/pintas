@@ -72,29 +72,13 @@ latihan:
         penjelasan: "Buat berkas main.go dan tempel program dari blok 'Program lengkap' di atas. Di Linux/macOS ganti dengan nano main.go."
       - perintah: "go vet main.go && go run main.go"
         penjelasan: "go vet adalah pemeriksa bawaan Go: SENYAP kalau tidak ada temuan (tidak mencetak apa pun berarti lulus). Setelah itu server menyala — biarkan terminal ini berjalan."
-      - perintah: "curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:8099/halo/aldi && curl -s -o /dev/null -w \"%{http_code}\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/halo/aldi && curl -s -o /dev/null -w \"%{http_code}\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/sehat"
-        penjelasan: "Di terminal kedua. Tiga kode status dalam tiga baris: 401, 200, 204. Lihat terminal pertama — muncul tiga baris log, termasuk untuk request yang ditolak, karena log dipasang paling luar."
+      - perintah: "curl -s -w \" [%{http_code}]\\n\" http://localhost:8099/halo/aldi && curl -s -w \" [%{http_code}]\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/halo/aldi && curl -s -o /dev/null -w \"%{http_code}\\n\" -H \"X-Kunci: rahasia\" http://localhost:8099/sehat"
+        penjelasan: "Di terminal kedua. Tiga baris status: 401, 200, 204. Perhatikan terminal pertama — muncul tiga baris log, termasuk untuk request yang ditolak, karena log dipasang paling luar."
       - perintah: "Tukar urutan pemasangan — taruh h = denganLog(h) SEBELUM h = denganKunci(\"rahasia\", h) — lalu jalankan ulang dan hitung baris log-nya"
         penjelasan: "Sekarang kunci ada di lapis terluar. Request tanpa kunci ditolak sebelum menyentuh log, jadi hanya dua baris log yang muncul (bukan tiga): satu untuk /halo/aldi yang lolos, satu untuk /sehat."
     hasil: |-
-      HTTP/1.1 401 Unauthorized
-      Content-Type: text/plain; charset=utf-8
-      Content-Length: 12
-
-      kunci salah
-
-      HTTP/1.1 200 OK
-      Date: Thu, 05 Nov 2026 08:17:04 GMT
-      Content-Length: 10
-      Content-Type: text/plain; charset=utf-8
-
-      halo, aldi
-
-      HTTP/1.1 204 No Content
-      Date: Thu, 05 Nov 2026 08:17:05 GMT
-
-      401
-      200
+      kunci salah [401]
+      halo, aldi [200]
       204
     cek_berhasil:
       - "Request tanpa header X-Kunci dijawab 401 dengan badan 'kunci salah' (12 byte)"
