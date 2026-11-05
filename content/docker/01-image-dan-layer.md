@@ -64,8 +64,8 @@ latihan:
       - "Docker terpasang dan daemon berjalan (docker version menampilkan bagian Server)"
       - "Terminal (git-bash / PowerShell)"
     langkah:
-      - perintah: "mkdir latihan-layer && cd latihan-layer && printf 'halo versi satu\\n' > app.py && printf 'requests==2.32.3\\n' > requirements.txt"
-        penjelasan: "Membuat dua berkas: satu baris kode dan satu daftar dependensi. requirements.txt sengaja terpisah supaya ada lapis yang lebih jarang berubah daripada kode."
+      - perintah: "mkdir latihan-layer && cd latihan-layer && printf 'import requests\\nprint(\"halo versi satu, requests\", requests.__version__)\\n' > app.py && printf 'requests==2.32.3\\n' > requirements.txt"
+        penjelasan: "Membuat dua berkas: satu skrip yang benar-benar memakai dependensi, dan satu daftar dependensi. Keduanya sengaja dipisah karena berubah pada waktu yang berbeda."
       - perintah: "printf 'FROM python:3.12-slim\\nWORKDIR /app\\nCOPY requirements.txt .\\nRUN pip install --no-cache-dir -r requirements.txt\\nCOPY . .\\nCMD [\"python\", \"app.py\"]\\n' > Dockerfile"
         penjelasan: "Dockerfile enam baris. Urutannya penting: dependensi disalin dan dipasang sebelum kode, supaya perubahan kode tidak membatalkan lapis pip install."
       - perintah: "docker build -t latihan-layer . && docker image history latihan-layer"
