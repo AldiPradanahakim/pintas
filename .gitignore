@@ -9,3 +9,7 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 coverage/
+
+# Hasil uji Playwright (dibuat ulang tiap run)
+test-results/
+playwright-report/
