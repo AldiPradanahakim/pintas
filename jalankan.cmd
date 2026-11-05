@@ -8,7 +8,7 @@ echo   Pintas - situs belajar pemrograman
 echo ============================================
 echo.
 
-echo [1/5] Memeriksa Node.js...
+echo [1/4] Memeriksa Node.js...
 where node >nul 2>nul
 if %errorlevel% neq 0 (
     echo.
@@ -21,7 +21,7 @@ if %errorlevel% neq 0 (
 )
 for /f "delims=" %%v in ('node -v') do echo       Node.js %%v terdeteksi
 
-echo [2/5] Memeriksa dependensi...
+echo [2/4] Memeriksa dependensi...
 if not exist "node_modules\" (
     echo       Belum ada. Menjalankan npm install ^(sekali saja, butuh beberapa menit^)...
     call npm install
@@ -35,9 +35,9 @@ if not exist "node_modules\" (
     echo       Sudah ada, dilewati.
 )
 
-echo [3/5] Memeriksa database...
+echo [3/4] Memeriksa database...
 if not exist "prisma\data.db" (
-    echo       Belum ada. Membuat dan mengisi dari konten...
+    echo       Belum ada. Membuat dan mengisi soal kuis dari konten...
     call npx prisma migrate deploy
     call npx prisma generate
     call npx tsx prisma/seed.ts
@@ -51,28 +51,28 @@ if not exist "prisma\data.db" (
     echo       Sudah ada, dilewati.
 )
 
-echo [4/5] Memeriksa hasil build...
-if not exist ".next\" (
-    echo       Belum ada. Build pertama bisa 1-2 menit...
-    call npm run build
-    if %errorlevel% neq 0 (
-        echo.
-        echo [ERROR] Build gagal. Lihat pesan di atas.
-        pause
-        exit /b 1
-    )
-) else (
-    echo       Sudah ada, dilewati.
+rem Isi soal kuis disegarkan setiap kali dijalankan: murah (kurang dari 2 detik) dan
+rem menghapus satu kelas bug - menambah soal di content\.md tapi kuis di situs tetap
+rem yang lama karena database tidak pernah diperbarui.
+echo [4/4] Menyegarkan soal kuis dari konten...
+call npx tsx prisma/seed.ts >nul 2>&1
+if %errorlevel% neq 0 (
+    echo       PERINGATAN: gagal menyegarkan soal. Situs tetap jalan dengan soal lama.
 )
 
-echo [5/5] Menjalankan situs...
 echo.
 echo ============================================
 echo   Buka di browser: http://localhost:3000
-echo   Tutup jendela ini untuk mematikan situs.
+echo.
+echo   Mode dev: perubahan di content\*.md langsung
+echo   terlihat setelah halaman dimuat ulang, tanpa
+echo   perlu build. Tutup jendela ini untuk mematikan.
 echo ============================================
 echo.
 
+rem npm run dev, bukan npm start: konten dibaca ulang tiap permintaan, jadi mengubah
+rem modul tidak butuh build ulang. Lebih lambat sedikit per halaman, tapi tidak ada
+rem langkah yang bisa basi.
 start "" http://localhost:3000
-call npm start
+call npm run dev
 pause
