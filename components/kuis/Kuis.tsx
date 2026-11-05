@@ -34,6 +34,9 @@ export default function Kuis({ slug, soal }: { slug: string; soal: SoalPublik[] 
 
   const terjawab = Object.keys(hasil).length;
   const benar = Object.values(hasil).filter((h) => h.benar).length;
+  // Soal yang sudah dijawab tapi belum tepat — dipakai untuk tautan balik di ringkasan
+  // skor (FR-18: setelah semua dijawab, tampil skor DAN tautan ke bagian tiap soal salah).
+  const salah = soal.filter((s) => hasil[s.id] && !hasil[s.id].benar);
 
   async function kirim(s: SoalPublik) {
     const nilai = (jawab[s.id] ?? '').trim();
@@ -91,7 +94,7 @@ export default function Kuis({ slug, soal }: { slug: string; soal: SoalPublik[] 
         {soal.map((s) => {
           const h = hasil[s.id];
           return (
-            <li key={s.id} className="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+            <li key={s.id} id={`kuis-soal-${s.nomor}`} className="scroll-mt-24 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
               <p className="text-sm font-medium">
                 {s.nomor}. {s.pertanyaan}
               </p>
@@ -164,7 +167,26 @@ export default function Kuis({ slug, soal }: { slug: string; soal: SoalPublik[] 
           <p className="font-semibold">
             Skor {skor}/{soal.length}
           </p>
-          <button type="button" onClick={ulangi} className="mt-2 rounded border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700">
+          {salah.length > 0 && (
+            <div className="mt-2">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Yang belum tepat — buka bagian ini lagi:
+              </p>
+              <ul className="mt-1 space-y-1 text-sm">
+                {salah.map((s) => (
+                  <li key={s.id}>
+                    <a href={`#kuis-soal-${s.nomor}`} className="text-teal-700 underline dark:text-teal-400">
+                      Soal {s.nomor}: {s.pertanyaan.length > 70 ? `${s.pertanyaan.slice(0, 70)}…` : s.pertanyaan}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-500">
+                Sudah dijawab benar: {soal.length - salah.length} dari {soal.length}.
+              </p>
+            </div>
+          )}
+          <button type="button" onClick={ulangi} className="mt-3 rounded border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700">
             Ulangi kuis
           </button>
         </div>

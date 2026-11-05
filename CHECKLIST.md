@@ -34,106 +34,106 @@ Dibangun otomatis dari `docs/02-PRD.md` § 3 (peta halaman),
 
 ### F-01
 
-- [ ] **FR-29** Beranda menampilkan track per tier; track tanpa konten berlabel `Segera` dan tanpa `href`.
+- [x] **FR-29** Beranda menampilkan track per tier; track tanpa konten berlabel `Segera` dan tanpa `href`.
       uji: Tidak ada tautan 404 dari beranda.
 
 ### F-02
 
-- [ ] **FR-07** Pencarian mencari di judul modul, judul heading, isi teks, dan isi blok kode.
+- [x] **FR-07** Pencarian mencari di judul modul, judul heading, isi teks, dan isi blok kode.
       uji: Kueri yang hanya muncul di dalam blok kode tetap menghasilkan modul tersebut.
-- [ ] **FR-08** Indeks pencarian dibangun saat build dan dimuat sebagai satu berkas statis; tidak ada permintaan jaringan per ketikan.
+- [x] **FR-08** Indeks pencarian dibangun saat build dan dimuat sebagai satu berkas statis; tidak ada permintaan jaringan per ketikan.
       uji: DevTools: mengetik 10 karakter → 0 permintaan jaringan.
-- [ ] **FR-09** Pencarian dijalankan di klien dengan debounce 200 ms, maksimal 8 hasil, dikelompokkan per track, kata kunci di-highlight.
+- [x] **FR-09** Pencarian dijalankan di klien dengan debounce 200 ms, maksimal 8 hasil, dikelompokkan per track, kata kunci di-highlight.
       uji: Mengetik cepat 5 karakter → hasil muncul sekali setelah berhenti.
-- [ ] **FR-10** Pencarian toleran salah ketik ringan: jarak edit 1 untuk kata lebih dari 4 huruf.
+- [x] **FR-10** Pencarian toleran salah ketik ringan: jarak edit 1 untuk kata lebih dari 4 huruf.
       uji: "midleware" menemukan "middleware".
-- [ ] **FR-11** Panel pencarian bisa dibuka dengan `Ctrl+K`/`Cmd+K`, ditutup `Esc`, dinavigasi `↑`/`↓`, dibuka `Enter`.
+- [x] **FR-11** Panel pencarian bisa dibuka dengan `Ctrl+K`/`Cmd+K`, ditutup `Esc`, dinavigasi `↑`/`↓`, dibuka `Enter`.
       uji: Semua tombol bekerja tanpa mouse.
-- [ ] **FR-12** Tidak ada hasil → pesan eksplisit + 3 saran modul. Riwayat 5 kueri terakhir tersimpan di localStorage dan bisa dihapus.
+- [x] **FR-12** Tidak ada hasil → pesan eksplisit + 3 saran modul. Riwayat 5 kueri terakhir tersimpan di localStorage dan bisa dihapus.
       uji: Kueri acak → pesan tampil, bukan panel kosong.
-- [ ] **FR-13** `Enter` tanpa memilih hasil membuka `/cari?q=` berisi hasil lengkap dengan paginasi 20 per halaman.
+- [x] **FR-13** `Enter` tanpa memilih hasil membuka `/cari?q=` berisi hasil lengkap dengan paginasi 20 per halaman.
       uji: 50 hasil → 3 halaman.
 
 ### F-03
 
-- [ ] **FR-30** Halaman track menampilkan semua modul dengan nomor, estimasi menit, badge latihan, dan status.
+- [x] **FR-30** Halaman track menampilkan semua modul dengan nomor, estimasi menit, badge latihan, dan status.
       uji: Jumlah baris = jumlah file modul track tersebut.
 
 ### F-04
 
-- [ ] **FR-01** Sistem membaca modul dari file Markdown di `content/<track>/<nomor>-<slug>.md` dan merendernya ke HTML saat build.
+- [x] **FR-01** Sistem membaca modul dari file Markdown di `content/<track>/<nomor>-<slug>.md` dan merendernya ke HTML saat build.
       uji: Menambah file `.md` baru lalu build ulang → halaman modul tersedia tanpa perubahan kode.
-- [ ] **FR-02** Frontmatter modul wajib memuat: `track`, `nomor`, `judul`, `slug`, `estimasi_menit`, `prasyarat[]`, `latihan[]`. Frontmatter tidak valid → build gagal dengan pesan yang menyebut file dan field.
+- [x] **FR-02** Frontmatter modul wajib memuat: `track`, `nomor`, `judul`, `slug`, `estimasi_menit`, `prasyarat[]`, `latihan[]`. Frontmatter tidak valid → build gagal dengan pesan yang menyebut file dan field.
       uji: Menghapus `judul` dari satu file → `npm run build` gagal, pesan menyebut nama file dan field `judul`.
-- [ ] **FR-03** Sistem memisahkan lapis 1 dan lapis 2 berdasarkan penanda di file: isi sebelum heading `## Lapis 2` = lapis 1; sesudahnya dirender di dalam `<details>`.
+- [x] **FR-03** Sistem memisahkan lapis 1 dan lapis 2 berdasarkan penanda di file: isi sebelum heading `## Lapis 2` = lapis 1; sesudahnya dirender di dalam `<details>`.
       uji: Modul tanpa heading `## Lapis 2` gagal validasi.
-- [ ] **FR-04** Setiap heading level 2 dan 3 mendapat `id` yang stabil (dari slug heading) untuk deep link.
+- [x] **FR-04** Setiap heading level 2 dan 3 mendapat `id` yang stabil (dari slug heading) untuk deep link.
       uji: Membuka `#error-umum` menggulir ke heading yang benar.
-- [ ] **FR-05** Blok kode dirender dengan label bahasa, tombol salin, dan blok "Output yang diharapkan" bila diberi penanda `output`.
+- [x] **FR-05** Blok kode dirender dengan label bahasa, tombol salin, dan blok "Output yang diharapkan" bila diberi penanda `output`.
       uji: Klik salin menyalin isi blok persis tanpa nomor baris.
-- [ ] **FR-06** Daftar isi otomatis dibuat dari heading lapis 1 + pintasan lapis 2, latihan, kuis.
+- [x] **FR-06** Daftar isi otomatis dibuat dari heading lapis 1 + pintasan lapis 2, latihan, kuis.
       uji: Modul 10 heading → daftar isi memuat semua heading lapis 1.
-- [ ] **FR-28** Modul dianggap selesai bila semua soal kuis dijawab dan minimal satu latihan berstatus `lulus`; pengguna dapat menandai manual.
+- [x] **FR-28** Modul dianggap selesai bila semua soal kuis dijawab dan minimal satu latihan berstatus `lulus`; pengguna dapat menandai manual.
       uji: Menandai manual langsung mengubah status.
 
 ### F-05
 
-- [ ] **FR-19** Latihan bertipe `web` dijalankan lewat route handler server yang meneruskan ke Wandbox API. Kunci API (bila ada) tidak pernah sampai ke browser.
+- [x] **FR-19** Latihan bertipe `web` dijalankan lewat route handler server yang meneruskan ke Wandbox API. Kunci API (bila ada) tidak pernah sampai ke browser.
       uji: DevTools Network: tidak ada permintaan langsung ke `wandbox.org` dari browser.
-- [ ] **FR-20** Server menolak permintaan latihan dengan kode > 64 KB, lebih dari 1 permintaan per detik per IP, atau bahasa di luar allowlist.
+- [x] **FR-20** Server menolak permintaan latihan dengan kode > 64 KB, lebih dari 1 permintaan per detik per IP, atau bahasa di luar allowlist.
       uji: 100 permintaan cepat → 429 setelah yang pertama.
-- [ ] **FR-21** Hasil uji: bandingkan stdout dengan `output_harapan` setelah normalisasi (`\r\n`→`\n`, trim tiap baris, buang baris kosong di akhir) dan jalankan maksimal satu `assert` tambahan.
+- [x] **FR-21** Hasil uji: bandingkan stdout dengan `output_harapan` setelah normalisasi (`\r\n`→`\n`, trim tiap baris, buang baris kosong di akhir) dan jalankan maksimal satu `assert` tambahan.
       uji: Output benar dengan spasi di ujung baris tetap lulus.
-- [ ] **FR-22** Status latihan (`lulus`/`gagal`/`error`) dan kode terakhir pengguna disimpan di localStorage per `latihan_id`.
+- [x] **FR-22** Status latihan (`lulus`/`gagal`/`error`) dan kode terakhir pengguna disimpan di localStorage per `latihan_id`.
       uji: Muat ulang halaman → kode terakhir dan status tetap ada.
-- [ ] **FR-23** Solusi latihan hanya diambil dari server saat tombol "Lihat solusi" ditekan, dan setiap pengambilan dicatat di log server.
+- [x] **FR-23** Solusi latihan hanya diambil dari server saat tombol "Lihat solusi" ditekan, dan setiap pengambilan dicatat di log server.
       uji: Solusi tidak ada di payload awal.
 
 ### F-06
 
-- [ ] **FR-24** Latihan bertipe `laptop` dirender sebagai panduan 6 bagian baku (kebutuhan, langkah, hasil, cek berhasil, kalau gagal, buktikan paham). Validasi konten gagal bila salah satu bagian kosong.
+- [x] **FR-24** Latihan bertipe `laptop` dirender sebagai panduan 6 bagian baku (kebutuhan, langkah, hasil, cek berhasil, kalau gagal, buktikan paham). Validasi konten gagal bila salah satu bagian kosong.
       uji: Modul dengan latihan laptop tanpa bagian "kalau gagal" gagal validasi.
 
 ### F-07
 
-- [ ] **FR-14** Soal kuis diambil dari DB per `modul_slug`; payload ke browser hanya berisi `id`, `tipe`, `soal`, `opsi` — tanpa `jawaban` dan tanpa `penjelasan`.
+- [x] **FR-14** Soal kuis diambil dari DB per `modul_slug`; payload ke browser hanya berisi `id`, `tipe`, `soal`, `opsi` — tanpa `jawaban` dan tanpa `penjelasan`.
       uji: `grep` pada HTML/JS bundle tidak menemukan kunci jawaban.
-- [ ] **FR-15** Penilaian dilakukan di server. Respons berisi `benar` (boolean), `jawaban_benar`, dan `penjelasan`.
+- [x] **FR-15** Penilaian dilakukan di server. Respons berisi `benar` (boolean), `jawaban_benar`, dan `penjelasan`.
       uji: POST jawaban salah → `benar:false` + `jawaban_benar` + `penjelasan`.
-- [ ] **FR-16** Tipe soal: `pilihan_ganda` (satu benar) dan `isian_singkat`. Isian dinormalisasi: trim, lowercase, spasi beruntun dirapatkan, tanda baca di ujung dibuang.
+- [x] **FR-16** Tipe soal: `pilihan_ganda` (satu benar) dan `isian_singkat`. Isian dinormalisasi: trim, lowercase, spasi beruntun dirapatkan, tanda baca di ujung dibuang.
       uji: `"  SELECT  "` dan `"select"` sama-sama benar.
-- [ ] **FR-17** Kuis dapat diulang tanpa batas; hanya skor terakhir yang disimpan (localStorage).
+- [x] **FR-17** Kuis dapat diulang tanpa batas; hanya skor terakhir yang disimpan (localStorage).
       uji: Mengulang 3x → hanya skor terakhir yang tampil.
-- [ ] **FR-18** Setelah semua soal dijawab, tampil skor dan tautan ke bagian modul untuk setiap soal yang salah.
+- [x] **FR-18** Setelah semua soal dijawab, tampil skor dan tautan ke bagian modul untuk setiap soal yang salah.
       uji: 2 salah → 2 tautan anchor tampil.
 
 ### F-10
 
-- [ ] **FR-25** Semua state pengguna disimpan di localStorage dengan prefiks `pintas:v1:`.
+- [x] **FR-25** Semua state pengguna disimpan di localStorage dengan prefiks `pintas:v1:`.
       uji: Tidak ada cookie yang diset selain preferensi tema.
-- [ ] **FR-26** Progres dapat diekspor ke JSON (satu berkas, berisi versi skema) dan diimpor kembali dengan validasi skema; impor yang tidak valid ditolak dengan pesan.
+- [x] **FR-26** Progres dapat diekspor ke JSON (satu berkas, berisi versi skema) dan diimpor kembali dengan validasi skema; impor yang tidak valid ditolak dengan pesan.
       uji: Impor berkas acak → ditolak, data lama utuh.
-- [ ] **FR-27** Reset progres hanya jalan setelah pengguna mengetik `HAPUS`.
+- [x] **FR-27** Reset progres hanya jalan setelah pengguna mengetik `HAPUS`.
       uji: Tombol reset tanpa konfirmasi tidak berpengaruh.
 
 ### F-11
 
-- [ ] **FR-32** Halaman `/panduan` memuat 11 bagian wajib sesuai PRD F-11.
+- [x] **FR-32** Halaman `/panduan` memuat 11 bagian wajib sesuai PRD F-11.
       uji: Checklist review: 11 bagian ada.
 
 ### F-12
 
-- [ ] **FR-31** Halaman `/stack` menampilkan semua bahasa & framework dengan kolom: nama, jenis, kegunaan, track terkait, cara konek DB, cara buat REST API, cara menyambung dari bahasa lain.
+- [x] **FR-31** Halaman `/stack` menampilkan semua bahasa & framework dengan kolom: nama, jenis, kegunaan, track terkait, cara konek DB, cara buat REST API, cara menyambung dari bahasa lain.
       uji: Setiap entri punya 7 kolom terisi atau ditandai `TODO: konfirmasi`.
 
 ### F-13
 
-- [ ] **FR-35** Tema gelap/terang mengikuti `prefers-color-scheme`, dapat diubah manual, tanpa kedip saat muat.
+- [x] **FR-35** Tema gelap/terang mengikuti `prefers-color-scheme`, dapat diubah manual, tanpa kedip saat muat.
       uji: Reload 10x → tidak ada kilatan putih pada mode gelap.
 
 ### F-14
 
-- [ ] **FR-33** `/404` menampilkan tautan ke beranda, pencarian, dan 3 modul populer. | URL acak → 404 dengan tautan berfungsi. | —
+- [x] **FR-33** `/404` menampilkan tautan ke beranda, pencarian, dan 3 modul populer. | URL acak → 404 dengan tautan berfungsi. | —
       uji: | FR-34 | Rute `/keystatic` hanya ada saat `NODE_ENV=development`. | Build produksi → `/keystatic` = 404.
 
 ## C. Kebutuhan non-fungsional (SRS § 2)

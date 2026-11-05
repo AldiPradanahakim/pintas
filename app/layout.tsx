@@ -32,8 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: SKRIP_TEMA }} />
       </head>
       <body className="min-h-screen">
+        <a href="#konten-utama" className="lewati-ke-konten">
+          Lompat ke konten
+        </a>
         <Header />
-        <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">{children}</main>
+        <main id="konten-utama" className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">{children}</main>
         <footer className="mx-auto w-full max-w-6xl px-4 pb-10 pt-4 text-sm text-slate-500 sm:px-6 dark:text-slate-400">
           <p>
             Pintas · materi berbahasa Indonesia ·{' '}

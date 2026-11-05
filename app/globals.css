@@ -19,6 +19,48 @@ html.dark {
   color-scheme: dark;
 }
 
+/*
+ * Fokus selalu terlihat (FR-36). Tanpa ini, Tailwind menghapus outline bawaan
+ * peramban pada tombol dan tautan, sehingga pengguna keyboard kehilangan jejak
+ * posisi — persyaratan aksesibilitas, bukan hiasan.
+ * `:focus-visible` dipakai supaya klik mouse tidak memunculkan cincin.
+ */
+:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+html.dark :focus-visible {
+  outline-color: #2dd4bf;
+}
+
+/* Lompat ke konten: elemen pertama yang muncul saat Tab ditekan. */
+.lewati-ke-konten {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 50;
+  padding: 0.5rem 0.75rem;
+  background: #0f766e;
+  color: #fff;
+  border-radius: 0 0 6px 0;
+}
+.lewati-ke-konten:focus {
+  left: 0;
+}
+
+/* Kurangi gerak bila pengguna memintanya. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
 }
