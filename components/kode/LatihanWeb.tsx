@@ -28,6 +28,9 @@ export interface HasilUji {
   pesan: string | null;
 }
 
+/** Latihan yang boleh dilihat browser: tanpa `solusi` (diambil dari API saat diminta). */
+type LatihanPublik = Omit<TipeWeb, 'solusi' | 'catatan_solusi'>;
+
 /**
  * Latihan "Di web" (F-05): editor + tombol jalankan + hasil.
  *
@@ -35,7 +38,7 @@ export interface HasilUji {
  * pengguna yang menutup tab tidak kehilangan pekerjaannya. Solusi TIDAK ikut di HTML
  * awal: diambil dari server hanya saat tombolnya ditekan (FR-23).
  */
-export default function LatihanWeb({ latihan, nomor }: { latihan: TipeWeb; nomor: number }) {
+export default function LatihanWeb({ latihan, nomor }: { latihan: LatihanPublik; nomor: number }) {
   const [kode, setKode] = useState(latihan.kode_awal);
   const [resetKe, setResetKe] = useState(latihan.kode_awal);
   const [hasil, setHasil] = useState<HasilUji | null>(null);

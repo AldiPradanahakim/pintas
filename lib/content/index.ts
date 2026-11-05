@@ -7,6 +7,7 @@ import type { EntriIndeks } from '../search/tipe';
 export type { Modul, ModulRingkas } from './types';
 export type { Heading } from './render';
 export type { EntriIndeks } from '../search/tipe';
+export { cariLatihan, cariLatihanWeb } from './latihan';
 
 const ringkasDari = (m: Modul): ModulRingkas => ({
   track: m.frontmatter.track,

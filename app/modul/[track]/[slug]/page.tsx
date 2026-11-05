@@ -103,9 +103,12 @@ export default async function HalamanModul({
         {fm.latihan.length > 0 && (
           <section id="latihan" className="mt-10 scroll-mt-24 space-y-4">
             <h2 className="text-xl font-semibold">Latihan</h2>
-            {latihanWeb.map((l, i) => (
-              <LatihanWeb key={l.id} latihan={l} nomor={i + 1} />
-            ))}
+            {latihanWeb.map((l, i) => {
+              // Solusi tidak boleh ikut ke payload halaman (BR-07, FR-23): seluruh objek
+              // frontmatter diserialisasi ke klien, jadi field rahasianya dibuang lebih dulu.
+              const { solusi: _s, catatan_solusi: _c, ...publik } = l;
+              return <LatihanWeb key={l.id} latihan={publik} nomor={i + 1} />;
+            })}
             {latihanLaptop.map((l, i) => (
               <LatihanLaptop key={l.id} latihan={l} nomor={latihanWeb.length + i + 1} />
             ))}

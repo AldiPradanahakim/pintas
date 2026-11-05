@@ -41,6 +41,9 @@ export default function Header() {
           <Link className="rounded px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" href="/panduan">
             Panduan
           </Link>
+          <Link className="rounded px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" href="/progres">
+            Progres
+          </Link>
         </nav>
 
         <button
